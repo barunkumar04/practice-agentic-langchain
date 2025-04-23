@@ -44,14 +44,14 @@ Welcome to the demo of Agentic Langchain. This has workedout example to work wit
    ```bash
    poetry shell
    ```
-
-5. Run to create Vector DB:
+5. Create folder '0_vector_store', in paralled to '0_knowledge_base'
+6. Run to create Vector DB:
 
    ```bash
     python 0_helper_agent/0_vectorization_with_metadata.py
    ```
 
-6. Run to experience Agentic Langchain:
+7. Run to experience Agentic Langchain:
 
    ```bash
     python 0_helper_agent/1_agent001.py
