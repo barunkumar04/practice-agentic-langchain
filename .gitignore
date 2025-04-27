@@ -1,1 +1,4 @@
 .qodo
+.env
+.env.example
+/0_vector_store
