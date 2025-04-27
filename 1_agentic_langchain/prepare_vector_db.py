@@ -5,6 +5,7 @@ from langchain.text_splitter import CharacterTextSplitter
 from langchain_community.document_loaders import TextLoader
 from langchain_community.vectorstores import Chroma
 from langchain_openai import OpenAIEmbeddings
+from langchain_community.document_loaders import WebBaseLoader
 
 #loading from .env variables. Eg - API key
 load_dotenv()
@@ -35,6 +36,8 @@ if not os.path.exists(persistent_directory):
 
     # Read the text content from each file and store it with metadata
     documents = []
+    
+    # Loading from files 
     for validator_file in validator_files:
         file_path = os.path.join(knowledge_base, validator_file)
         loader = TextLoader(file_path)
@@ -43,6 +46,17 @@ if not os.path.exists(persistent_directory):
             # Add metadata to each document indicating its source
             file.metadata = {"source": validator_file}
             documents.append(file)
+
+    # Loading from website
+    url = "https://www.globalshares.com"
+
+    # Create a loader for web content
+    web_loader = WebBaseLoader(url)
+    web_docs = web_loader.load()
+    for web_doc in web_docs:
+            # Add metadata to each document indicating its source
+            web_doc.metadata = {"source": url}
+            documents.append(web_doc)
 
     # Split the documents into chunks
     text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
