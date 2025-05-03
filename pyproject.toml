@@ -5,7 +5,7 @@ description = "Everything you need to know to get started with LangChain"
 authors = ["Barun Kumar"]
 
 [tool.poetry.dependencies]
-python = ">=3.10.0,<3.12"
+python = ">=3.10.0,<3.12.2"
 langchain-openai = "^0.1.8"
 python-dotenv = "^1.0.1"
 langchain = "^0.2.1"

@@ -28,6 +28,7 @@ Welcome to the demo of Agentic Langchain. This has workedout example to work wit
 2. Install dependencies using Poetry:
 
    ```bash
+   poetry env activate
    poetry install --no-root
    ```
 
