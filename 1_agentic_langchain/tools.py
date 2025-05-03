@@ -190,7 +190,7 @@ def get_tools():
             description="Useful for when you need to know the current time", # Description of the tool
         ),
         Tool(
-            name="Troublshoot", 
+            name="Troubleshoot", 
             func=troubleshoot, 
             description="Find troubleshooting step for given error",
         ),
