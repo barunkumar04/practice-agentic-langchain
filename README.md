@@ -1,11 +1,11 @@
 # Agentic LangChain
 
 Welcome to the demo of Agentic Langchain. This has workedout example to work with diffrent tools likes -
-   - Code logic: Get current time
-   - Validator: Use RAG vector store to validate country and currency
-   - In memory table
+   - Code logic: Validate IBAN
+   - RAG: Fine troubleshooting steps for error
+   - In memory table: Find row info
    - Wikipedia
-   - Chat GPT model
+   - Chat GPT model: For any question answer
 
 
 ## Getting Started
@@ -20,7 +20,6 @@ Welcome to the demo of Agentic Langchain. This has workedout example to work wit
 1. Clone the repository:
 
    ```bash
-   <!-- TODO: UPDATE TO MY  -->
    git clone https://github.com/barunkumar04/practice-agentic-langchain
    cd practice-agentic-langchain
    ```
@@ -49,16 +48,15 @@ Welcome to the demo of Agentic Langchain. This has workedout example to work wit
 6. Run to create Vector DB:
 
    ```bash
-    python 0_helper_agent/0_vectorization_with_metadata.py
+    python 1_agentic_langchain/create_vector_store.py
    ```
 
 7. Run to experience Agentic Langchain:
 
    ```bash
-    python 0_helper_agent/1_agent001.py
+    python 1_agentic_langchain/agent001.py
    ```
 
-## 
 
 ## Credit
 - https://brandonhancock.io/langchain-master-class
