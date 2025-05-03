@@ -1,6 +1,5 @@
 import os
 from dotenv import load_dotenv
-
 from langchain.text_splitter import CharacterTextSplitter
 from langchain_community.document_loaders import TextLoader
 from langchain_community.vectorstores import Chroma
@@ -59,7 +58,7 @@ if not os.path.exists(persistent_directory):
             documents.append(web_doc)
 
     # Split the documents into chunks
-    text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
+    text_splitter = CharacterTextSplitter(chunk_size=100, chunk_overlap=20)
     docs = text_splitter.split_documents(documents)
 
     # Display information about the split documents

@@ -101,33 +101,44 @@ question_answer_chain = create_stuff_documents_chain(llm, qa_prompt)
 rag_chain = create_retrieval_chain(
     history_aware_retriever, question_answer_chain)
 
-# Define a very simple tool function that returns the current time
-def get_current_time(*args, **kwargs):
-    """Returns the current time in H:MM AM/PM format."""
-    import datetime  # Import datetime module to get current time
+def validate_iban(iban):
+    """
+    Validates an IBAN using the ISO 7064 MOD 97-10 algorithm.
+    Example - Let's say we have the IBAN: DE41500105170123456789 
+        1. Rearrange: The string becomes: 500105170123456789DE41.
+        2. Convert letters: 5001051701234567891314.
+        3. Integer Conversion: 5001051701234567891314.
+        4. Modulo 97: The remainder of this integer divided by 97 is 1.
+        5. Validation: Since the remainder is 1, the check digit test is passed.
 
-    now = datetime.datetime.now()  # Get current time
-    return now.strftime("%I:%M %p")  # Format time in H:MM AM/PM format
+    Args:
+        iban: The IBAN string to validate.
+
+    Returns:
+        True if the IBAN is valid, False otherwise.
+    """
+    iban = iban.replace(" ", "").upper()
+    if not iban.isalnum():
+        return False
+    if len(iban) < 15 or len(iban) > 34:
+        return False
+
+    moved_iban = iban[4:] + iban[:4]
+    numeric_iban = "".join(str(ord(char) - 55) if char.isalpha() else char for char in moved_iban)
+
+    return int(numeric_iban) % 97 == 1
 
 
-def local_knowledge_base(to_validate: str) -> bool:
-    # Define the user's question
-    query = "valid?"
-
+def troubleshoot(troubleshoot: str) -> bool:
+    
     # Retrieve relevant documents based on the query
     retriever = db.as_retriever(
         search_type="similarity_score_threshold",
         search_kwargs={"k": 3, "score_threshold": 0.1},
     )
-    relevant_docs = retriever.invoke(query)
+    relevant_docs = retriever.invoke(troubleshoot)
 
-    # Display the relevant results with metadata
-    print("\n--- Relevant Documents ---")
-    for i, doc in enumerate(relevant_docs, 1):
-        if to_validate in doc.page_content:
-            print(f"Source: {doc.metadata['source']}\n")
-            return True
-    return False
+    return relevant_docs
 
 def kafka_deadletter_check(*args, **kwargs):
     # Connect to an in-memory database
@@ -157,9 +168,6 @@ def kafka_deadletter_check(*args, **kwargs):
     cursor.execute("SELECT * FROM kafka_deadletter")
     rows = cursor.fetchall()
 
-    # for row in rows:
-    #     print(row)
-
     # Close the connection
     conn.close()
     return rows
@@ -177,28 +185,25 @@ def search_wikipedia(query):
 def get_tools():
     tools = [
         Tool(
-            name="Time",  # Name of the tool
-            func=get_current_time,  # Function that the tool will execute
-            # Description of the tool
-            description="Useful for when you need to know the current time",
+            name="Validate IBAN",  # Name of the tool
+            func=validate_iban,  # Function that the tool will execute
+            description="Useful for when you need to know the current time", # Description of the tool
         ),
         Tool(
-            name="Local Knowledge Base",  # Name of the tool
-            func=local_knowledge_base,  # Function that the tool will execute
-            # Description of the tool
-            description="Useful for when you need to know valid country or currency",
+            name="Troublshoot", 
+            func=troubleshoot, 
+            description="Find troubleshooting step for given error",
         ),
         Tool(
-            name="KafkaDeadletter",  # Name of the tool
-            func=kafka_deadletter_check,  # Function that the tool will execute
-            # Description of the tool
+            name="KafkaDeadletter",  
+            func=kafka_deadletter_check,
             description="Useful for when you need to check kafka dead letter",
         ),
-        # Tool(
-        #     name="Wikipedia",
-        #     func=search_wikipedia,
-        #     description="Useful for when you need to know information about a topic.",
-        # ),
+        Tool(
+            name="Wikipedia",
+            func=search_wikipedia,
+            description="Useful for when you need to know information about a topic.",
+        ),
         Tool(
             name="Answer Question",
             func=lambda input, **kwargs: rag_chain.invoke(
@@ -209,3 +214,6 @@ def get_tools():
     ]
 
     return tools
+
+def get_llm():
+    return llm

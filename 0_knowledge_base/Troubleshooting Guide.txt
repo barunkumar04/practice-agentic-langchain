@@ -1,0 +1,34 @@
+﻿java.lang.IllegalStateException
+Stacktrace 
+Exception in thread "main" java.lang.IllegalStateException: Event 1021 status must be approved.
+
+
+Steps
+1. Search EVENT_STATE table for given event id, verify if latest state is ‘APPROVED’
+2. If yes, run ProcessEvent job with ‘Retry’ mode
+3. If no, escalate to PROD_QRT@thinkcompany.com
+
+
+
+
+
+
+DuplicateKeyException
+Stacktrace 
+Exception in thread "main" com.thinkcompany.DuplicateKeyException: Failed while creating an task T0032
+
+
+Steps
+1. Search TASK_DETAILS  table for given task id, verify if a row present.
+2. If yes,no action required
+3. If no, ask L2 team to re-run the job
+
+
+NotEnoughReplicasException
+Stacktrace 
+Temporary network glitches, broker temporarily unavailable, or a broker returning NotEnoughReplicasException. 
+
+
+Steps
+* Implement retry mechanisms (using retries parameter in Kafka configuration or Spring Kafka's RetryTemplate) to automatically attempt the operation again after a delay. 
+*

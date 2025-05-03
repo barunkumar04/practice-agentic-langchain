@@ -7,6 +7,7 @@ from langchain.agents import AgentExecutor, create_react_agent
 from langchain_core.messages import AIMessage, HumanMessage
 from langchain_core.tools import Tool
 from tools import get_tools
+from tools import get_llm
 
 # Load environment variables from .env file - Open API key
 load_dotenv()
@@ -21,7 +22,7 @@ react_docstore_prompt = hub.pull("hwchase17/react")
 
 # Create the ReAct Agent with document store retriever
 agent = create_react_agent(
-    llm=llm,
+    llm=get_llm(),
     tools=get_tools(),
     prompt=react_docstore_prompt,
 )
@@ -38,7 +39,7 @@ while True:
         break
     response = agent_executor.invoke(
         {"input": query, "chat_history": chat_history})
-    print(f"Agent: {response['output']}")
+    print(f"\nAgent: {response['output']}")
 
     # Update history
     chat_history.append(HumanMessage(content=query))

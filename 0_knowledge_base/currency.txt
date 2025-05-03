@@ -1,2 +1,0 @@
-Valid Country: IN,FR,US,UK
-Valid Currency: INR,USD,DOLLER,POUND
