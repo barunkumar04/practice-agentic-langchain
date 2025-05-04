@@ -178,9 +178,9 @@ def search_wikipedia(query):
 
     try:
         # Limit to two sentences for brevity
-        return summary(query, sentences=2)
+        return "\n"+summary(query, sentences=2)+"\n"
     except:
-        return "I couldn't find any information on that."
+        return "\nI couldn't find any information on that.\n"
         
 def get_tools():
     tools = [

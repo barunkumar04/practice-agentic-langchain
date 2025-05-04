@@ -28,13 +28,17 @@ agent = create_react_agent(
 )
 
 agent_executor = AgentExecutor.from_agent_and_tools(
-    agent=agent, tools=get_tools(), handle_parsing_errors=True, verbose=True,
+    agent=agent, 
+    tools=get_tools(), 
+    handle_parsing_errors=True, 
+    max_execution_time=60, # sec
+    verbose=True,
 )
 
 chat_history = []
 while True:
 
-    query = input("\nYou: ")
+    query = input("\n\nYou: ")
     if query.lower() == "exit":
         break
     response = agent_executor.invoke(
